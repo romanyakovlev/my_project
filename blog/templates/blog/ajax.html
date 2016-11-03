@@ -1,0 +1,110 @@
+{% extends 'blog/base.html' %}
+
+
+{% block content %}
+
+
+<div class="container">
+  <div class="row" style="padding-top:50px;">
+
+    <div class="col-sm-6">
+      <p>AJAX create text test</p>
+      <form id="ajax-test" action="/blog/submit/" method="post">
+        {% csrf_token %}
+        <input id="text" name="name" autocomplete="off">
+        <button type="submit" name="button">Submit</button>
+      </form>
+      <div id="text_list">
+      {% for x in text_list %}
+        <p class="post">{{x.text}}</p>
+      {% endfor %}
+      </div>
+      <button id='delete_posts' type="submit" name="button">Delete all posts</button>
+    </div>
+
+    <div class="col-sm-6">
+      <p>AJAX search test</p>
+      <input id="search_text" name="name" autocomplete="off">
+      <div id="search_result">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+
+$("#search_text").keyup( function(){
+        $('#search_result').empty();
+        console.log("launched");
+        var search_text = $('#search_text').val();
+        $.ajax({
+          url : "search_posts/",
+          type : "POST",
+          data : {search_text : search_text},
+          success : function(data) {
+                console.log("succes");
+                for (i=0;i < data['objects'].length;i++){
+                  var text_html = document.createElement("p");
+                  text_html.innerHTML = data['objects'][i]['fields']['text'];
+                  $('#search_result').append(text_html);
+                  console.log(text_html);
+                }
+                $("#search_result").hide();
+                $("#search_result").show(150);
+                if (data['objects'].length == 0){
+                  var text_html = document.createElement("p");
+                  text_html.innerHTML = "No results";
+                  $('#search_result').append(text_html);
+                  $("#search_result").hide();
+                  $("#search_result").show(150);
+                }
+                if (search_text == ''){
+                    $('#search_result').empty();
+                }
+            },
+        });
+});
+
+
+$("#delete_posts").click(    function(){
+        event.preventDefault();
+        console.log("launched");
+        $.ajax({
+          url : "delete_all_objects/",
+          type : "POST",
+          success : function() {
+                console.log("success");
+                $("#text_list").hide(1000);
+                $("#text_list").empty();
+                $("#text_list").show(0);
+            },
+        });
+});
+
+
+$('#ajax-test').on('submit', function(event){
+    event.preventDefault();
+    console.log("form submitted!");
+    console.log($('#text').val());
+    $.ajax({
+      url : "submit/",
+      type : "POST",
+      data : { the_post : $('#text').val() },
+      success : function(data) {
+            var text = $('#text').val()
+            $("#usf").html("without reloading "+text+"so wow ");
+            console.log(data['text']);
+            var text_html = document.createElement("p");
+            text_html.innerHTML = data['text'];
+            $('#text_list').append(text_html);
+            $('#text_list p').last().hide();
+            $('#text_list p').last().show(500);
+            console.log("success");
+        },
+});
+});
+
+</script>
+{% endblock %}

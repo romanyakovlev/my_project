@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <title>MyBlog</title>
+
+
+      <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        {% block extrahead %}
+        {% endblock %}
+
+        <script type="text/javascript">
+        $(function(){
+        {% block jquery %}
+        {% endblock %}
+        });
+
+        </script>
+
+        <style type="text/css">
+        body{line-height: 1.4;font-size: 2.3rem;font-family: "Droid Serif", serif;padding-top:50px;padding-bottom:40px;}.container-narrow{margin:0 auto;max-width:700px;}.container-narrow>hr{margin:30px 0;}.container{word-break: break-all;max-width:700px}
+        a.nav-list-button{background-color: white}
+        ul.ul-nav{list-style:none;
+              line-height: 40px;
+              font-size: 24.5px;
+              margin-right: 10px;
+        }
+        ul.ul-nav li{display: inline;}
+        </style>
+    </head>
+<body>
+
+<div class='container-narrow'>
+  <div class="header" style="display:inline">
+
+<ul class="ul-nav pull-right">
+        <li><a href="/blog/" class="nav-list-button">Посты</a></li>
+        <li><a href="/blog/submit/">AJAX test</a></li>
+</ul>
+
+  <h1>Обо всем сразу</h3>
+
+
+    </div>
+    <div class="container">
+         {% block content %}Empty page{% endblock %}
+    </div> <!-- container -->
+  </div>
+    <script src="{% static "scripts/main.js" %}" type="text/javascript"></script>
+</body>
+</html>
